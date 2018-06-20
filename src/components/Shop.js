@@ -2,11 +2,29 @@ import React, { Component } from 'react';
 import Header from './Header';
 import ProductListing from './ProductListing';
 import products from '../lib/data';
+import AddProductForm from './AddProductForm';
 
 class Shop extends Component {
   state = {
     products: products,
     cartItems: []
+  };
+
+  nextId = () => {
+    return this.state.products.reduce((curr, next) => (
+      curr > next.id ? curr : next.id
+    ), 0) + 1;
+  };
+
+  createProduct = (product) => {
+    // debugger;
+    this.setState({
+      products: this.state.products.concat(product)
+    });
+  };
+
+  handleAddClick = (product) => {
+    this.createProduct(Object.assign({}, product, { id: this.nextId() }));
   };
 
   getProductById = (id) => {
@@ -27,7 +45,7 @@ class Shop extends Component {
         return item.productId !== productId ? item : Object.assign(item, { quantity: item.quantity + 1 })
       }),
     });
-  }
+  };
 
   handleAddToCartClick = (productId) => {
     this.decrementProductQuantity(productId);
@@ -57,6 +75,20 @@ class Shop extends Component {
     });
   };
 
+  handleEditSubmit = (id, attrs) => {
+    this.setState({
+      products: this.state.products.map((p) => {
+        return p.id === id ? Object.assign({}, p, attrs) : p;
+      })
+    })
+  };
+
+  handleDeleteClick = (id) => {
+    this.setState({
+      products: this.state.products.filter((p) => p.id !== id)
+    });
+  }
+
   render() {
     const { products, cartItems } = this.state;
 
@@ -70,6 +102,12 @@ class Shop extends Component {
           <ProductListing
             products={products}
             onAddToCartClick={this.handleAddToCartClick}
+            onEditSubmit={this.handleEditSubmit}
+            onDeleteClick={this.handleDeleteClick}
+          />
+
+          <AddProductForm
+            onAddClick={this.handleAddClick}
           />
         </main>
       </div>

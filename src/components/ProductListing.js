@@ -10,6 +10,8 @@ class ProductListing extends Component {
           onAddToCartClick={this.props.onAddToCartClick}
           key={product.id}
           {...product}
+          onEditSubmit={this.props.onEditSubmit}
+          onDeleteClick={this.props.onDeleteClick}
         />
       );
     });

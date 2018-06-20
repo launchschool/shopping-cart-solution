@@ -20,7 +20,7 @@ const Cart = ({cartItems, onCheckoutClick}) => {
           </div>
         ) : (
           <div>
-            <table class="cart-items">
+            <table className="cart-items">
               <thead>
                 <tr>
                   <th>Item</th>
